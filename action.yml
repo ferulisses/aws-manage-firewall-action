@@ -1,0 +1,26 @@
+name: 'AWS Open Firewall'
+description: 'This action will add the github server IP Address to a Security Group on AWS EC2'
+inputs:
+  rule-name: 
+    description: 'name of the security Group on AWS EC2 Firewall Panel'
+    required: true
+    default: 'github-deploy'
+outputs:
+runs:
+  using: "composite"
+  steps:
+    - name: Get My IP
+      run: |
+        echo 'MYIP<<EOF' >> $GITHUB_ENV
+        curl https://checkip.amazonaws.com >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
+        
+    - name: Configure AWS command line
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Allow our connection on AWS Firewall rule
+      run: aws ec2 authorize-security-group-ingress --group-name ${{ inputs.rule-name }} --protocol tcp --port 22 --cidr ${{ env.MYIP }}/32
