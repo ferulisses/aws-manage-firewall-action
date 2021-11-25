@@ -41,7 +41,7 @@ runs:
       run: aws ec2 authorize-security-group-ingress --group-name ${{ inputs.rule-name }} --protocol all --cidr ${{ env.MYIP }}/32
       shell: bash
 
-    - name: Allow our connection on AWS Firewall rule
+    - name: Close our connection on AWS Firewall rule
       if: ${{ inputs.action == 'close' }}
       run: aws ec2 revoke-security-group-ingress --group-name ${{ inputs.rule-name }} --protocol all --cidr ${{ env.MYIP }}/32
       shell: bash
