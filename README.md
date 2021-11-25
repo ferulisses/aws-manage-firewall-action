@@ -37,11 +37,11 @@ On your Github Action, use:
       - id: open-firewall
         uses: ferulisses/aws-manage-firewall-action@v1
         with:
-          rule-name: 'github-deploy'  # use the same name that you created on AWS Console
+          rule-name: 'github-deploy'  # use the same name that you created on AWS Console, github-deploy is the default so you can ommit it
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: 'us-east-1'  # adjust to your region 
-          action: 'open'
+          aws-region: 'us-east-1'  # adjust to your region, us-east-1 is the default so you can ommit
+          action: 'open'  # open is the default, so you can ommit it
           
       # add here actions that will access the VM, such as SSH, Rsync, or even Database connections
       
