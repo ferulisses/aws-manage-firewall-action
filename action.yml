@@ -5,7 +5,16 @@ inputs:
     description: 'name of the security Group on AWS EC2 Firewall Panel'
     required: true
     default: 'github-deploy'
-outputs:
+  aws-access-key-id:
+    description: 'AWS Access Key ID'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key'
+    required: true
+  aws-region:
+    description: 'AWS Region'
+    required: true
+    default: 'us-east-1'
 runs:
   using: "composite"
   steps:
@@ -14,13 +23,16 @@ runs:
         echo 'MYIP<<EOF' >> $GITHUB_ENV
         curl https://checkip.amazonaws.com >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
+      shell: bash
         
     - name: Configure AWS command line
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
 
     - name: Allow our connection on AWS Firewall rule
       run: aws ec2 authorize-security-group-ingress --group-name ${{ inputs.rule-name }} --protocol tcp --port 22 --cidr ${{ env.MYIP }}/32
+      shell: bash
+
