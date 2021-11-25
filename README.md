@@ -1,10 +1,8 @@
-# aws-open-firewall-action
+# aws-manage-firewall-action
 
-This action will add the Github Deploy Server IP Address to an AWS Security Group rule.
+This script is used to open the AWS Firewall so the server that is buiding the App can access SSH on AWS EC2 servers without leaving the Firewall ports (such as SSH port) open worldwide and without need to allow all Github Deploy Servers IP Address allowed to connect to our servers.
 
-This is used to open the AWS Firewall so the server that is buiding the App can access SSH on AWS EC2 servers without leaving the Firewall ports (such as SSH port) open worldwide and without need to allow all Github Deploy Servers IP Address allowed to connect to our servers.
-
-This action is intended to be used together with aws-close-firewall-action, so you will open the SSH port before access the VMs and close after that.
+This is done adding the Github Deploy Server IP Address to an AWS Security Group rule attached to the VMs.
 
 ## requirements:
 
