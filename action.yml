@@ -3,7 +3,7 @@ description: 'This action will add the github server IP Address to a Security Gr
 inputs:
   rule-name: 
     description: 'name of the security Group on AWS EC2 Firewall Panel'
-    required: true
+    required: false
     default: 'github-deploy'
   aws-access-key-id:
     description: 'AWS Access Key ID'
@@ -13,8 +13,12 @@ inputs:
     required: true
   aws-region:
     description: 'AWS Region'
-    required: true
+    required: false
     default: 'us-east-1'
+  action:
+    description: 'Choose between "open" or "close"'
+    required: false
+    default: "open"
 runs:
   using: "composite"
   steps:
@@ -33,6 +37,11 @@ runs:
         aws-region: ${{ inputs.aws-region }}
 
     - name: Allow our connection on AWS Firewall rule
-      run: aws ec2 authorize-security-group-ingress --group-name ${{ inputs.rule-name }} --protocol tcp --port 22 --cidr ${{ env.MYIP }}/32
+      if: ${{ inputs.action == 'open' }}
+      run: aws ec2 authorize-security-group-ingress --group-name ${{ inputs.rule-name }} --protocol all --cidr ${{ env.MYIP }}/32
       shell: bash
 
+    - name: Allow our connection on AWS Firewall rule
+      if: ${{ inputs.action == 'close' }}
+      run: aws ec2 revoke-security-group-ingress --group-name ${{ inputs.rule-name }} --protocol all --cidr ${{ env.MYIP }}/32
+      shell: bash
