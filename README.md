@@ -12,6 +12,7 @@ You need API access to your AWS account
 
 Setup a security group in your AWS account:
 
+(you can skip this step if you already have a security group attached to the VM)
 - Login to AWS Console
 - Access EC2 Service
 - On the menu on left, in "Network and Security" -> "Security Groups"
@@ -35,5 +36,7 @@ On your Github Action, use:
         uses: ferulisses/aws-open-firewall-action@v1
         with:
           rule-name: 'github-deploy'  # use the same name that you created on AWS Console
- 
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-1'  # adjust to your region 
 ```
