@@ -1,5 +1,8 @@
 name: 'AWS Open Firewall'
 description: 'This action will add the github server IP Address to a Security Group on AWS EC2'
+branding:
+  icon: unlock
+  color: gray-dark
 inputs:
   rule-name: 
     description: 'name of the security Group on AWS EC2 Firewall Panel'
