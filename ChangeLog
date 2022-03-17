@@ -1,0 +1,8 @@
+
+v1.2 - 2022-03-17 - Implemented auto remove the Firewall rule at the
+       end of process
+
+v1.1 - 2022-03-17 - Changed the rule selector, from rule-name to rule-id, 
+       this way it's more compatible with other configurations
+
+v1.0 - 2021-11-05 - Initial Release
