@@ -36,8 +36,10 @@ runs:
 
     - name: Allow our connection on AWS Firewall rule by Rule Id
       run: aws ec2 authorize-security-group-ingress --group-id ${{ inputs.rule-id }} --protocol all --cidr ${{ env.MYIP }}/32
+      shell: bash
           
     - name: Close our connection on AWS Firewall rule by Rule Id
       uses: webiny/action-post-run@2.0.1
       with:
         run: aws ec2 revoke-security-group-ingress --group-id ${{ inputs.rule-id }} --protocol all --cidr ${{ env.MYIP }}/32
+        shell: bash
