@@ -40,7 +40,7 @@ On your Github Action, use:
 ```
     steps:
       - id: open-firewall
-        uses: ferulisses/aws-manage-firewall-action@v1.2
+        uses: ferulisses/aws-manage-firewall-action@v1.4
         with:
           rule-id: 'sg-xxxxxxxx'
           rule-name: 'launch-wizard-xx'
