@@ -1,3 +1,5 @@
+v1.3 - 2023-03-02 - Changed dependency to configure-aws-credentials@v1-node16 
+       to fix Warning
 
 v1.2 - 2022-03-17 - Implemented auto remove the Firewall rule at the
        end of process

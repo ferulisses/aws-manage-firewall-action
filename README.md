@@ -39,7 +39,7 @@ On your Github Action, use:
 ```
     steps:
       - id: open-firewall
-        uses: ferulisses/aws-manage-firewall-action@v1.2
+        uses: ferulisses/aws-manage-firewall-action@v1.3
         with:
           rule-id: 'sg-xxxxxxxx'  # use the ID that you got on previous step
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
