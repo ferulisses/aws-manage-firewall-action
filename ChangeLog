@@ -1,5 +1,10 @@
-v1.3 - 2023-03-02 - Changed dependency to configure-aws-credentials@v1-node16 
+v1.4 - 2023-03-02 - Changed dependency to configure-aws-credentials@v1-node16 
        to fix Warning
+
+v1.3 - 2022-04-17 - Implemented rule-name selector, search for the 
+       security group id using the security group name
+                  - Implemented port parameter
+                  - Implemented protocol parameter
 
 v1.2 - 2022-03-17 - Implemented auto remove the Firewall rule at the
        end of process

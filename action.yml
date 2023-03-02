@@ -6,7 +6,20 @@ branding:
 inputs:
   rule-id: 
     description: 'Security Group Id on AWS EC2 Firewall Panel'
-    required: true
+    required: false
+    default: ''
+  rule-name:
+    description: 'Security Group Name on AWS EC2 Firewall Panel'
+    required: false
+    default: ''
+  port:
+    description: 'The port to allow'
+    required: false
+    default: ''
+  protocol:
+    description: 'The protocol to allow for the selected port'
+    required: false
+    default: 'all'
   aws-access-key-id:
     description: 'AWS Access Key ID'
     required: true
@@ -33,13 +46,34 @@ runs:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
         aws-region: ${{ inputs.aws-region }}
+    
+    - name: Get Security Group ID
+      run: |
+        GROUP_ID="${{ inputs.rule-id }}"
+        PORT_RULE=""
+        if [ -z  "$GROUP_ID" ]
+        then
+          GROUP_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=${{ inputs.rule-name }} --query 'SecurityGroups[*].[GroupId]' --output text)
+        fi
+        
+        if [ -z "$GROUP_ID" ]
+        then
+          echo "::error::Couldn't find the securty group id" && exit 1;
+        else
+          echo "GROUP_ID=$GROUP_ID" >> $GITHUB_ENV;
+        fi
+
+        if [ ! -z "${{ inputs.port }}" ]
+        then
+          echo "PORT_RULE=--port ${{ inputs.port }}" >> $GITHUB_ENV;
+        fi
+      shell: bash
 
     - name: Allow our connection on AWS Firewall rule by Rule Id
-      run: aws ec2 authorize-security-group-ingress --group-id ${{ inputs.rule-id }} --protocol all --cidr ${{ env.MYIP }}/32
+      run: aws ec2 authorize-security-group-ingress --group-id ${{ env.GROUP_ID }} --protocol ${{ inputs.protocol }} --cidr ${{ env.MYIP }}/32 ${{ env.PORT_RULE }}
       shell: bash
           
     - name: Close our connection on AWS Firewall rule by Rule Id
       uses: webiny/action-post-run@2.0.1
       with:
-        run: aws ec2 revoke-security-group-ingress --group-id ${{ inputs.rule-id }} --protocol all --cidr ${{ env.MYIP }}/32
-
+        run: aws ec2 revoke-security-group-ingress --group-id ${{ env.GROUP_ID }} --protocol ${{ inputs.protocol }} --cidr ${{ env.MYIP }}/32 ${{ env.PORT_RULE }}
